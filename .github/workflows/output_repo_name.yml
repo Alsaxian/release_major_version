@@ -9,3 +9,7 @@ jobs:
       - name: Print repository information
         run: |
           echo "Repository: $GITHUB_REPOSITORY"
+      - name: Print current latest release version
+        run: |
+          latest_release=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest)
+          echo "Lastest r v: $latest_release"

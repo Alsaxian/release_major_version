@@ -14,6 +14,7 @@ jobs:
           latest_release=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest)
           tag_name=$(echo "$latest_release" | jq -r '.tag_name')
           commit_id=$(echo "$latest_release" | jq -r '.target_commitish')
+          echo "latest_version=$(echo $tag_name | sed -e 's/^v//')" | tee $GITHUB_OUTPUT/output.txt
           # echo "Lastest r v: $latest_release"
           echo "Lastest r tag: $tag_name"
           echo "Lastest r commit: $commit_id"

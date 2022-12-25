@@ -10,6 +10,7 @@ jobs:
         run: |
           echo "Repository: $GITHUB_REPOSITORY"
       - name: Print current latest release version
+        id: print1
         run: |
           latest_release=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest)
           tag_name=$(echo "$latest_release" | jq -r '.tag_name')
@@ -22,6 +23,7 @@ jobs:
           echo "Lastest r commit: $commit_id"
 
       - name: Get current major version
+        id: current_major
         run: |
-          current_major_version=$(echo $latest_version | cut -d'.' -f1)
+          current_major_version=$(echo ${{ steps.print1.outputs.latest_version }} | cut -d'.' -f1)
           echo "Current major version: $current_major_version"

@@ -25,6 +25,7 @@ jobs:
       - id: current_major_version
         run: |
           current_major_version=$(echo $latest_version | cut -d'.' -f1)
+          echo "Current major version: $current_major_version"
           echo "::set-output name=current_major_version::$current_major_version"
 
       # Check if the latest release is a patch release (has only three parts)
@@ -34,6 +35,7 @@ jobs:
           if [[ "$latest_version" == *.*.* ]]; then
             is_patch_release=false
           fi
+          echo "Is patch release: $is_patch_release"
           echo "::set-output name=is_patch_release::$is_patch_release"
 
       # Check if the latest release is the latest under the current major version
@@ -47,6 +49,7 @@ jobs:
               break
             fi
           done
+          echo "is latest under current major version: $is_latest_under_current_major_version"
           echo "::set-output name=is_latest_under_current_major_version::$is_latest_under_current_major_version"
 
       # Check if the latest release is the latest under any major version
@@ -60,6 +63,7 @@ jobs:
               break
             fi
           done
+          echo "is latest under any major version: $is_latest_under_any_major_version"
           echo "::set-output name=is_latest_under_any_major_version::$is_latest_under_any_major_version"
 
       # Update the major version tag if necessary

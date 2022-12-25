@@ -1,0 +1,11 @@
+name: Print repository information
+
+on: [push]
+
+jobs:
+  print-repository-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print repository information
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"

@@ -21,7 +21,7 @@ jobs:
           echo "Lastest r tag: $tag_name"
           echo "Lastest r commit: $commit_id"
 
-      # - name: Get current major version
-      #   run: |
-      #     current_major_version=$(echo $latest_version | cut -d'.' -f1)
-      #     echo "Current major version: $current_major_version"
+      - name: Get current major version
+        run: |
+          current_major_version=$(echo $latest_version | cut -d'.' -f1)
+          echo "Current major version: $current_major_version"

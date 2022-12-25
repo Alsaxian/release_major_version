@@ -17,7 +17,7 @@ jobs:
           latest_version=$(echo $tag_name | sed -e 's/^v//')
 
           # echo "Lastest r v: $latest_release"
-          echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
+          echo "latest_version=$latest_version" | tee $GITHUB_OUTPUT 
           echo "Lastest r tag: $tag_name"
           echo "Lastest r commit: $commit_id"
 

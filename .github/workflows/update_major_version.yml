@@ -1,0 +1,74 @@
+on: 
+  release:
+    types: [published]
+
+jobs:
+  update_major_version_tag:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v2
+
+      # Get the latest release
+      - id: latest_release
+        run: |
+          # Get the latest release
+          latest_release=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest)
+          
+          # Here maybe it will need secrets! #
+
+          # Extract the tag name and version number from the latest release
+          latest_tag=$(echo $latest_release | jq -r '.tag_name')
+          latest_version=$(echo $latest_tag | sed -e 's/^v//')
+
+      # Get the current major version
+      - id: current_major_version
+        run: |
+          current_major_version=$(echo $latest_version | cut -d'.' -f1)
+          echo "::set-output name=current_major_version::$current_major_version"
+
+      # Check if the latest release is a patch release (has only three parts)
+      - id: is_patch_release
+        run: |
+          is_patch_release=true
+          if [[ "$latest_version" == *.*.* ]]; then
+            is_patch_release=false
+          fi
+          echo "::set-output name=is_patch_release::$is_patch_release"
+
+      # Check if the latest release is the latest under the current major version
+      - id: is_latest_under_current_major_version
+        run: |
+          is_latest_under_current_major_version=true
+          tags=$(git tag)
+          for tag in $tags; do
+            if [[ "$tag" == v$current_major_version.* ]] && [[ "$tag" > "$latest_tag" ]]; then
+              is_latest_under_current_major_version=false
+              break
+            fi
+          done
+          echo "::set-output name=is_latest_under_current_major_version::$is_latest_under_current_major_version"
+
+      # Check if the latest release is the latest under any major version
+      - id: is_latest_under_any_major_version
+        run: |
+          is_latest_under_any_major_version=true
+          tags=$(git tag)
+          for tag in $tags; do
+            if [[ "$tag" == v*.*.* ]] && [[ "$tag" > "$latest_tag" ]]; then
+              is_latest_under_any_major_version=false
+              break
+            fi
+          done
+          echo "::set-output name=is_latest_under_any_major_version::$is_latest_under_any_major_version"
+
+      # Update the major version tag if necessary
+      - if: steps.is_patch_release.outputs.is_patch_release == 'false' && steps.is_latest_under_any_major_version.outputs.is_latest_under_any_major_version == 'true'
+        run: |
+          # Remove the current major version tag from the previous release
+          git push origin :refs/tags/v$current_major_version
+
+          # Add the current major version tag to the latest release
+          git tag v$current_major_version
+          git push origin v$current_major_version
+

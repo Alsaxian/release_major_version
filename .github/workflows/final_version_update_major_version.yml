@@ -21,6 +21,6 @@ jobs:
           git push origin :refs/tags/v$cmv
           git tag v$cmv $commit_id
         env:
-          cmv = ${{ steps.majorv.outputs.current_major_version }}
-          commit_id = ${{ steps.majorv.outputs.release_commit_id }}
+          cmv: ${{ steps.majorv.outputs.current_major_version }}
+          commit_id: ${{ steps.majorv.outputs.release_commit_id }}
 

@@ -11,5 +11,5 @@ jobs:
       - name: Get current major version
         id: majorv
         run: |
-          release_tag="${$GITHUB_REF##*/}"
+          release_tag="${GITHUB_REF##*/}"
           echo $release_tag

@@ -13,11 +13,12 @@ jobs:
         run: |
           release_tag="${GITHUB_REF##*/}"
           release_json=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_tag)
-          release_commit_id=$(echo "$latest_json" | jq -r '.target_commitish')
+          echo release_commit_id=$(echo "$latest_json" | jq -r '.target_commitish') | tee $GITHUB_OUTPUT
           release_version=$(echo $release_tag | sed -e 's/^v//')
-          current_major_version=$(echo $release_tag | cut -d'.' -f1)
+          echo current_major_version=$(echo $release_tag | cut -d'.' -f1) | tee $GITHUB_OUTPUT
       - name: Update major version
         run: |
+          echo v$cmv
           git push origin :refs/tags/v$cmv
           git tag v$cmv $commit_id
         env:

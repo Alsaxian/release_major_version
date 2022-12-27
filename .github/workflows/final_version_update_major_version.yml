@@ -22,6 +22,7 @@ jobs:
         run: |
           echo v$cmv
           git push origin :refs/tags/v$cmv
+          echo $GITHUB_SHA
           git tag v$cmv $GITHUB_SHA
           git push origin v1
         env:

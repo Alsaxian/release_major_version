@@ -12,7 +12,7 @@ jobs:
         id: majorv
         run: |
           release_tag="${GITHUB_REF##*/}"
-          release_json=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_tag)
+          release_json=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$release_tag)
           echo $release_json
           release_commit_id=$(echo $release_json | jq -r '.target_commitish')
           echo release_commit_id=$release_commit_id | tee $GITHUB_OUTPUT

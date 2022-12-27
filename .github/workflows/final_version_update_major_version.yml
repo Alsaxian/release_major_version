@@ -20,12 +20,12 @@ jobs:
           echo current_major_version=$(echo $release_version | cut -d'.' -f1) | tee $GITHUB_OUTPUT
       - name: Update major version
         run: |
-          echo v$cmv
-          git push origin :refs/tags/v$cmv
+          echo v_major_version
+          git push origin :refs/tags/v_major_version
           echo $GITHUB_SHA
-          git tag v$cmv $GITHUB_SHA
-          git push origin v1
+          git tag v_major_version $GITHUB_SHA
+          git push origin v_major_version
         env:
-          cmv: ${{ steps.majorv.outputs.current_major_version }}
+          v_major_version: v${{ steps.majorv.outputs.current_major_version }}
           # commit_id: ${{ steps.majorv.outputs.release_commit_id }}
 

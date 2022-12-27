@@ -23,6 +23,7 @@ jobs:
           echo v$cmv
           git push origin :refs/tags/v$cmv
           git tag v$cmv $GITHUB_SHA
+          git push origin v1
         env:
           cmv: ${{ steps.majorv.outputs.current_major_version }}
           # commit_id: ${{ steps.majorv.outputs.release_commit_id }}

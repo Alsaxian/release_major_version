@@ -12,4 +12,15 @@ jobs:
         id: majorv
         run: |
           release_tag="${GITHUB_REF##*/}"
-          echo $release_tag
+          release_json=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_tag)
+          release_commit_id=$(echo "$latest_json" | jq -r '.target_commitish')
+          release_version=$(echo $release_tag | sed -e 's/^v//')
+          current_major_version=$(echo $release_tag | cut -d'.' -f1)
+      - name: Update major version
+        run: |
+          git push origin :refs/tags/v$cmv
+          git tag v$cmv $commit_id
+        env:
+          cmv = ${{ steps.majorv.outputs.current_major_version }}
+          commit_id = ${{ steps.majorv.outputs.release_commit_id }}
+

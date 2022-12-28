@@ -20,7 +20,7 @@ jobs:
           git push origin :refs/tags/$v_major_version
           git tag $v_major_version $GITHUB_SHA
           git push origin $v_major_version
-          echo "Attached tag $v_major_version to the commit $GITHUB_SHA."
+          echo "Attached tag $v_major_version to commit $GITHUB_SHA."
         env:
           v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
 

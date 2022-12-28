@@ -1,0 +1,26 @@
+on: 
+  release:
+    types: [published]
+
+jobs:
+  update_major_version_tag:
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      - name: Get current major version
+        id: get_major_v
+        run: |
+          release_tag="${GITHUB_REF##*/}"
+          release_version=$(echo $release_tag | sed -e 's/^v//')
+          echo current_major_version=$(echo $release_version | cut -d'.' -f1) | tee $GITHUB_OUTPUT
+      - name: Update major version
+        run: |
+          echo $v_major_version
+          git push origin :refs/tags/$v_major_version
+          git tag $v_major_version $GITHUB_SHA
+          git push origin $v_major_version
+          echo "Attached tag $v_major_version to the commit $GITHUB_SHA."
+        env:
+          v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
+

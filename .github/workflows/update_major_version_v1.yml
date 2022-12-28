@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Get current major version
-        id: majorv
+        id: get_major_v
         run: |
           release_tag="${GITHUB_REF##*/}"
           # release_json=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$release_tag)
@@ -25,7 +25,8 @@ jobs:
           echo $GITHUB_SHA
           git tag $v_major_version $GITHUB_SHA
           git push origin $v_major_version
+          echo "Attached tag $v_major_version to the commit $GITHUB_SHA."
         env:
-          v_major_version: v${{ steps.majorv.outputs.current_major_version }}
+          v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
           # commit_id: ${{ steps.majorv.outputs.release_commit_id }}
 

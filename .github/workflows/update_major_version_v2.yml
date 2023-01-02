@@ -18,7 +18,7 @@ jobs:
             echo current_major_version=${BASH_REMATCH[1]} | tee $GITHUB_OUTPUT
             echo minor=${BASH_REMATCH[2]}
             echo patch=${BASH_REMATCH[3]}
-            echo pre=${BASH_REMATCH[4]} | tee $GITHUB_OUTPUT
+            # echo pre=${BASH_REMATCH[4]} | tee $GITHUB_OUTPUT
             # if [ -n $pre ]; then
             #   echo "This is a patch version, no need to update the major version. Exiting gracefully. "
             #   exit 0
@@ -42,7 +42,7 @@ jobs:
         env:
           v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
       - name: Pre. No update
-        if: steps.get_major_v.outputs.pre != ''
+        # if: steps.get_major_v.outputs.pre != ''
         run:
           echo "This is a pre release, no need to update the major version. "
 

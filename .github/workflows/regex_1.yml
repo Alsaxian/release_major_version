@@ -13,7 +13,7 @@ jobs:
         run: |
           echo release_tag="${GITHUB_REF_NAME}"
           release_tag="v1.2.4-ptch"
-          if [[ $release_tag =~ ^v(\d+)\.(\d+)\.(\d+)((-*\w*))?$ ]]; then
+          if [[ $release_tag =~ ^v(\d+)\.(\d+)\.(\d+)(-*\w*)?$ ]]; then
             first=${BASH_REMATCH[1]}
             second=${BASH_REMATCH[2]}
             third=${BASH_REMATCH[3]}

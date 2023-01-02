@@ -16,20 +16,21 @@ jobs:
           release_tag="${GITHUB_REF##*/}" ## same as ${GITHUB_REF_NAME}
           if [[ "$release_tag" =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)-?([[:alnum:]]+)?$ ]]; then
             echo current_major_version=${BASH_REMATCH[1]} | tee $GITHUB_OUTPUT
-            echo middle_version=${BASH_REMATCH[2]}
-            echo minor_version=${BASH_REMATCH[3]}
-            echo patch=${BASH_REMATCH[4]}
-            if [ -n $patch ]; then
-              echo "This is a patch version, no need to update the major version. Exiting gracefully. "
-              exit 0
-            else
-              echo patch is empty. We are going further.
-            fi
+            echo minor=${BASH_REMATCH[2]}
+            echo patch=${BASH_REMATCH[3]}
+            echo pre=${BASH_REMATCH[4]}
+            # if [ -n $pre ]; then
+            #   echo "This is a patch version, no need to update the major version. Exiting gracefully. "
+            #   exit 0
+            # else
+            #   echo patch is empty. We are going further.
+            # fi
           else
             echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*', optionally followed by a patch note. "
             exit 1
           fi
       - name: Update major version
+        if: $pre == ''
         run: |
           set -e
           echo $v_major_version
@@ -39,4 +40,9 @@ jobs:
           echo "Attached tag $v_major_version to commit $GITHUB_SHA."
         env:
           v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
+      - name: Pre. No update
+        if: $pre !== ''
+        run:
+          echo "This is a pre release, no need to update the major version. "
+
 

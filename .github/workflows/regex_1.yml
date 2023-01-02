@@ -11,8 +11,8 @@ jobs:
       - name: Get parts
         id: get_parts
         run: |
-          echo release_tag="${GITHUB_REF_NAME}"
-          release_tag="v1.2.4-ptch"
+          release_tag=v1.2.4-ptch
+          echo release_tag="$release_tag"
           if [[ $release_tag =~ ^v(\d+)\.(\d+)\.(\d+)(-*\w*)?$ ]]; then
             first=${BASH_REMATCH[1]}
             second=${BASH_REMATCH[2]}

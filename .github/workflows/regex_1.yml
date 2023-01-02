@@ -13,7 +13,7 @@ jobs:
         run: |
           release_tag=v1.2.4
           echo $release_tag
-          if [[ $release_tag =~ ^v(\d+)\.(\d+)\.(\d+)$ ]]; then
+          if [[ "$release_tag" =~ ^v(\d+)\.(\d+)\.(\d+)$ ]]; then
             first=${BASH_REMATCH[1]}
             second=${BASH_REMATCH[2]}
             third=${BASH_REMATCH[3]}

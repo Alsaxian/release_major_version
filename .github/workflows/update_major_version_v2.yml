@@ -26,7 +26,7 @@ jobs:
             #   echo patch is empty. We are going further.
             # fi
           else
-            echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*', optionally followed by a patch note. "
+            echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*', optionally followed by a pre release note. "
             exit 1
           fi
       - name: Update major version

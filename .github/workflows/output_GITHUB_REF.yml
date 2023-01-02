@@ -10,3 +10,4 @@ jobs:
         run: |
           echo "Release tag: $GITHUB_REF"
           echo "Release ref name: $GITHUB_REF_NAME"
+          

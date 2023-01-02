@@ -11,7 +11,7 @@ jobs:
       - name: Get current major version
         id: get_major_v
         run: |
-          release_tag="${GITHUB_REF##*/}"
+          release_tag="${GITHUB_REF##*/}" ## same as ${GITHUB_REF_NAME}
           release_version=$(echo $release_tag | sed -e 's/^v//')
           echo current_major_version=$(echo $release_version | cut -d'.' -f1) | tee $GITHUB_OUTPUT
       - name: Update major version

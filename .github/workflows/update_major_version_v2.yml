@@ -1,3 +1,4 @@
+name: verify version first
 on: 
   release:
     types: [published]
@@ -12,8 +13,19 @@ jobs:
         id: get_major_v
         run: |
           release_tag="${GITHUB_REF##*/}" ## same as ${GITHUB_REF_NAME}
-          release_version=$(echo $release_tag | sed -e 's/^v//')
-          echo current_major_version=$(echo $release_version | cut -d'.' -f1) | tee $GITHUB_OUTPUT
+          if [[ "$release_tag" =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)-?([[:alnum:]]+)?$ ]]; then
+            echo current_major_version=${BASH_REMATCH[1]} | tee $GITHUB_OUTPUT
+            echo middle_version=${BASH_REMATCH[2]}
+            echo minor_version=${BASH_REMATCH[3]}
+            echo patch=${BASH_REMATCH[4]}
+            if [[ -n $patch ]]; then
+              echo "This is a patch version, no need to update the major version. Exiting gracefully. "
+              exit 0
+            fi
+          else
+            echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*', optionally followed by a patch note. "
+            exit 1
+          fi
       - name: Update major version
         run: |
           echo $v_major_version

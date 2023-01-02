@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
       - name: Update major version
-        if: steps.get_major_v.outputs.pre == ''
+        if: "${{ steps.get_major_v.outputs.pre == '' }}"
         run: |
           set -e
           echo $v_major_version

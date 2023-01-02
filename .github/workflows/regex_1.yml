@@ -11,9 +11,9 @@ jobs:
       - name: Get parts
         id: get_parts
         run: |
-          release_tag=v1.2.41alpha2
+          release_tag=v1.2.41-alpha2
           echo $release_tag
-          if [[ "$release_tag" =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)(-?[[:alnum:]]+)?$ ]]; then
+          if [[ "$release_tag" =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)-?([[:alnum:]]+)?$ ]]; then
             first=${BASH_REMATCH[1]}
             second=${BASH_REMATCH[2]}
             third=${BASH_REMATCH[3]}

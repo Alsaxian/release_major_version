@@ -41,7 +41,7 @@ jobs:
         env:
           v_major_version: v${{ steps.get_major_v.outputs.current_major_version }}
       - name: Pre. No update
-        if: $pre !== ''
+        if: $pre != ''
         run:
           echo "This is a pre release, no need to update the major version. "
 

@@ -12,6 +12,7 @@ jobs:
       - name: Get current major version
         id: get_major_v
         run: |
+          set -e
           release_tag="${GITHUB_REF##*/}" ## same as ${GITHUB_REF_NAME}
           if [[ "$release_tag" =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)-?([[:alnum:]]+)?$ ]]; then
             echo current_major_version=${BASH_REMATCH[1]} | tee $GITHUB_OUTPUT
@@ -28,6 +29,7 @@ jobs:
           fi
       - name: Update major version
         run: |
+          set -e
           echo $v_major_version
           git push origin :refs/tags/$v_major_version
           git tag $v_major_version $GITHUB_SHA

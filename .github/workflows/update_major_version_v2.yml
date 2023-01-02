@@ -19,7 +19,7 @@ jobs:
             echo middle_version=${BASH_REMATCH[2]}
             echo minor_version=${BASH_REMATCH[3]}
             echo patch=${BASH_REMATCH[4]}
-            if [[ -n $patch ]]; then
+            if [ -n $patch ]; then
               echo "This is a patch version, no need to update the major version. Exiting gracefully. "
               exit 0
             else

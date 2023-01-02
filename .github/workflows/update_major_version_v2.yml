@@ -33,6 +33,7 @@ jobs:
         # if: steps.get_major_v.outputs.pre == ''
         run: |
           set -e
+          echo "current_major_version: ${{ steps.get_major_v.outputs.current_major_version }}"
           echo $v_major_version
           git push origin :refs/tags/$v_major_version
           git tag $v_major_version $GITHUB_SHA

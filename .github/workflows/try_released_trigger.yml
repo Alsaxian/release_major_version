@@ -11,38 +11,32 @@ jobs:
         uses: actions/checkout@v3
       - name: Parse and check version
         id: parse_check_version
-          # This step uses a regex expression which will try to parse the version tag and store them in 4 variables. 
+          # This step uses a regex expression, which will try to parse the version tag and store it in 3 variables. 
           # Invalid version number will throw an error and stop the workflow.
-          # Examples for an invalid version: v1.2, v1.2., v1.2.3-, v.1.2.3, 1.2.3, v1.2.b
-          # Valid version will be split into parts and sent to the next steps, depending if it is a pre release.
-          # Examples for a valid version: v0.1.2, v12.28.3095, v0.1.2-alpha, v0.1.2beta 
+          # Examples for an invalid version: v1.2, v1.2., v1.2.3-, v.1.2.3, 1.2.3, v1.2.b, 
+          # v0.1.2-alpha, v0.1.2beta (for pre-releases please use the "Set as a pre-release" function of GitHub, which will not trigger this workflow)
+          # Valid version will be split into 3 parts with the first part, major version number being sent to the next step.
+          # Examples for a valid version: v0.1.2, v12.28.3095
         run: |
           set -e
           release_tag="${GITHUB_REF_NAME}"
-          if [[ $release_tag =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)-?([[:alnum:]]+)?$ ]]; then
+          if [[ $release_tag =~ ^v([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)$ ]]; then
             echo current_major_version=${BASH_REMATCH[1]} | tee --append $GITHUB_OUTPUT
             echo minor=${BASH_REMATCH[2]}
             echo build=${BASH_REMATCH[3]}
-            echo pre=${BASH_REMATCH[4]} | tee --append $GITHUB_OUTPUT
           else
-            echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*', optionally followed by a pre release tag. "
+            echo "Error: version does not match pattern. please make sure that a release version follows the format 'v*.*.*'."
             exit 1
           fi
       - name: Update major version
-        if: steps.parse_check_version.outputs.pre == ''
-          # Only normal releases can trigger this step, such as v0.1.2
         run: |
           set -e
-          git push origin :refs/tags/$v_major_version # Removes the major version tag from the old commit, if it exists 
+          git push origin :refs/tags/$v_major_version # Removes the major version tag from the old commit on remote, if it exists 
           git tag $v_major_version $GITHUB_SHA # Creates the major vesion tag on the current commit
           git push origin $v_major_version
           echo "Attached tag $v_major_version to commit $GITHUB_SHA."
         env:
           v_major_version: v${{ steps.parse_check_version.outputs.current_major_version }}
-      - name: Pre. No update
-        if: steps.parse_check_version.outputs.pre != ''
-          # Pre releases come here, such as v0.1.2-alpha, v0.1.2beta. We do nothing to them. 
-        run:
-          echo "This is a pre release, no need to update the major version. "
+
 
 
